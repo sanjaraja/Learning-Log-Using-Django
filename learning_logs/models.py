@@ -12,5 +12,15 @@ class Topic(models.Model):
 class Entry(models.Model):
     #Specific things that need to be learned about a topic using many to one topic:
     topic = models.ForeignKey("Topic", on_delete=models.PROTECT)
-    text = models
+    text = models.TextField()
+    date_added  = models.DateTimeField(auto_now_add = True)
+
+    class Meta:
+        verbose_name_plural = "entries"
+    
+    def __str__(self):
+        #This will return a string representation of the model:
+        return self.text[:50] + "..."
+
+
 
