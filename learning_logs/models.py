@@ -11,6 +11,6 @@ class Topic(models.Model):
 
 class Entry(models.Model):
     #Specific things that need to be learned about a topic using many to one topic:
-    topic = models.ForeignKey(Topic)
+    topic = models.ForeignKey("Topic", on_delete=models.PROTECT)
     text = models
 
