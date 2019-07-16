@@ -1,0 +1,14 @@
+<!Doctype html>
+{%extends "base.html"%}
+
+{%block content%}
+    <p> Topics </p>
+
+    <ul>
+     {% for topic in topics%}
+       <li>{{topic}} </li>
+     {%empty%}
+       <li> There are no topics. <li>
+     {%endfor%}
+    </ul>
+{%endblock content%}

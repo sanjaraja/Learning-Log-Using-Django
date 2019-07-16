@@ -5,6 +5,9 @@ from . import views
 
 urlpatterns = [
     #This is the home page
-    path('', views.index, name = "index")
+    path('', views.index, name = "index"),
+
+    #This will show the topics:
+    path('topics', views.topics, name = "topics")
 ]
 
