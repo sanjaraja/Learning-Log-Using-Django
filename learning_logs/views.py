@@ -12,3 +12,9 @@ def topics(request):
     #This is the context that we will be sending to the template:
     context = {"topics": topics} #Contains the set of topics that will be listed on the page
     return render(request, "topics.html", context)
+
+def topic(request, topic_id):
+    topic = Topic.objects.get(id = topic_id)
+    entries = topic.entry_set.order_by('-date_added')
+    context = {'topic': topic, "entries": entries}
+    return render(request, "topic.html", context)

@@ -8,6 +8,9 @@ urlpatterns = [
     path('', views.index, name = "index"),
 
     #This will show the topics:
-    path('topics', views.topics, name = "topics")
+    path('topics/', views.topics, name = "topics"),
+
+    #Seeing an individual topic page:
+    path('topic/<int:topic_id>/', views.topic, name = "topic")
 ]
 
