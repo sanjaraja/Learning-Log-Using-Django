@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Topic
-from .forms import TopicForm
+from .models import Topic, Entry
+from .forms import TopicForm, EntryForm
 
 
 # Create your views here.
@@ -28,7 +28,7 @@ def new_topic(request):
         form = TopicForm()
     else:
         #If there is a POST requestm then the data needs to be processed
-        form = TopicForm(request.POST) #storing data that is stored in request.POST
+        form = TopicForm(data = request.POST) #storing data that is stored in request.POST
         if form.is_valid(): #Checking whether or not all fields have been validly filled out
             form.save() #Writes data in form to database
             return redirect("topics")
@@ -36,6 +36,25 @@ def new_topic(request):
     #Displaying a blank or invalid form:
     context = {"form": form}
     return render(request, "new_topic.html", context)
+
+#This method will be called when user wants to add an entry w/o admin page: 
+def new_entry(request, topic_id):
+    topic = Topic.objects.get(id = topic_id)
+
+    if request.method != "POST":
+        #If there is no data submitted, then create a blank entry form:
+        form = EntryForm()
+    else:
+        form = EntryForm(data = request.POST)
+        if form.is_valid():
+            new_entry = form.save(commit = False) #Need to tell Django to create a new object without sending it into database
+            new_entry.topic = topic
+            new_entry.save() #Saving entry to database with correct associated topic
+            return redirect("topic", topic_id = topic_id)
+    
+    context = {"topic": topic, "form": form}
+    return render(request, "new_entry.html", context)
+
 
 
 
