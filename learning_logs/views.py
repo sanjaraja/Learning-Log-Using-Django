@@ -55,6 +55,22 @@ def new_entry(request, topic_id):
     context = {"topic": topic, "form": form}
     return render(request, "new_entry.html", context)
 
+def edit_entry(request, entry_id):
+    entry = Entry.objects.get(id = entry_id)
+    topic = entry.topic 
+
+    if request.method != 'POST':
+        form = EntryForm(instance = entry) #Django pulls up preexisting information for this entry
+    else:
+        #POST data submitted; process data
+        form = EntryForm(instance = entry, data = request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("topic", topic_id = topic.id)
+    
+    context = {"entry": entry, "topic": topic, "form": form}
+    return render(request, "edit_entry.html", context)
+
 
 
 
