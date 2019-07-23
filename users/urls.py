@@ -6,6 +6,9 @@ app_name = 'users'
 urlpatterns = [
     # Include default auth urls.
     path('', include('django.contrib.auth.urls')),
+
+    #Including a logout page: 
+    path("logout/", views.logout_view, name = "logout"),
     # Registration page.
     #path('register/', views.register, name='register'),
 ]
