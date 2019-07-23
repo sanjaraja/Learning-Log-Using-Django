@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -8,6 +9,7 @@ def index(request):
     """The home page for learning log"""
     return render(request, "index.html")
 
+@login_required(login_url='users:login')
 def topics(request):
     #Showing all the topics:
     topics = Topic.objects.order_by("date_added") #Querying the database and requesting the queryset in topics
@@ -15,12 +17,14 @@ def topics(request):
     context = {"topics": topics} #Contains the set of topics that will be listed on the page
     return render(request, "topics.html", context)
 
+@login_required(login_url='users:login')
 def topic(request, topic_id):
     topic = Topic.objects.get(id = topic_id)
     entries = topic.entry_set.order_by('-date_added') #Need to sort the entires by most recently added
     context = {'topic': topic, "entries": entries}
     return render(request, "topic.html", context)
 
+@login_required(login_url='users:login')
 def new_topic(request):
     #Adding a new topic by the user:
     if request.method != "POST":
@@ -37,7 +41,8 @@ def new_topic(request):
     context = {"form": form}
     return render(request, "new_topic.html", context)
 
-#This method will be called when user wants to add an entry w/o admin page: 
+#This method will be called when user wants to add an entry w/o admin page
+@login_required(login_url='users:login')
 def new_entry(request, topic_id):
     topic = Topic.objects.get(id = topic_id)
 
@@ -55,6 +60,7 @@ def new_entry(request, topic_id):
     context = {"topic": topic, "form": form}
     return render(request, "new_entry.html", context)
 
+@login_required(login_url='users:login')
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id = entry_id)
     topic = entry.topic 

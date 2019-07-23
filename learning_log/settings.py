@@ -31,16 +31,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+     #My apps:
+    "learning_logs", 
+    "users",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    #My apps:
-    "learning_logs", 
-    "users",
 ]
 
 MIDDLEWARE = [
@@ -123,4 +124,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = 'users:login'
+#LOGIN_REDIRECT_URL = 'users:login'
