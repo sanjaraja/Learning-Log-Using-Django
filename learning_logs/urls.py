@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.urls import path
 from . import views
 
+app_name = "learning_logs"
 urlpatterns = [
     #This is the home page
     path('', views.index, name = "index"),

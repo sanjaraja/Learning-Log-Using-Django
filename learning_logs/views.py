@@ -31,7 +31,7 @@ def new_topic(request):
         form = TopicForm(data = request.POST) #storing data that is stored in request.POST
         if form.is_valid(): #Checking whether or not all fields have been validly filled out
             form.save() #Writes data in form to database
-            return redirect("topics")
+            return redirect("learning_logs:topics")
     
     #Displaying a blank or invalid form:
     context = {"form": form}
@@ -50,7 +50,7 @@ def new_entry(request, topic_id):
             new_entry = form.save(commit = False) #Need to tell Django to create a new object without sending it into database
             new_entry.topic = topic
             new_entry.save() #Saving entry to database with correct associated topic
-            return redirect("topic", topic_id = topic_id)
+            return redirect("learning_logs:topic", topic_id = topic_id)
     
     context = {"topic": topic, "form": form}
     return render(request, "new_entry.html", context)
@@ -66,7 +66,7 @@ def edit_entry(request, entry_id):
         form = EntryForm(instance = entry, data = request.POST)
         if form.is_valid():
             form.save()
-            return redirect("topic", topic_id = topic.id)
+            return redirect("learning_logs:topic", topic_id = topic.id)
     
     context = {"entry": entry, "topic": topic, "form": form}
     return render(request, "edit_entry.html", context)

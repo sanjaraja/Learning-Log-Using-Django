@@ -2,7 +2,7 @@
 
 {%block content%}
     <p> Add a new topic: </p>
-    <form action = "{% url 'new_topic' %}" method = POST>
+    <form action = "{% url 'learning_logs:new_topic' %}" method = POST>
         {%csrf_token %}
         {{form.as_p}}
         <button name = "submit"> Add Topic </button>
