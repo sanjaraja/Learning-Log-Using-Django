@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 
 # Create your views here.
@@ -12,15 +13,20 @@ def index(request):
 @login_required(login_url='users:login')
 def topics(request):
     #Showing all the topics:
-    topics = Topic.objects.order_by("date_added") #Querying the database and requesting the queryset in topics
+    topics = Topic.objects.filter(owner=request.user).order_by("date_added") #Querying the database and requesting the queryset in topics
     #This is the context that we will be sending to the template:
     context = {"topics": topics} #Contains the set of topics that will be listed on the page
     return render(request, "topics.html", context)
 
 @login_required(login_url='users:login')
 def topic(request, topic_id):
-    topic = Topic.objects.get(id = topic_id)
-    entries = topic.entry_set.order_by('-date_added') #Need to sort the entires by most recently added
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    #Making sure that the topic belongs to the current user:
+    if topic.owner != request.user:
+        raise Http404
+
+    entries = topic.entry_set.order_by('-date_added') #Sorting entries by date added and making sure topics are exclusive to user
     context = {'topic': topic, "entries": entries}
     return render(request, "topic.html", context)
 
@@ -34,7 +40,9 @@ def new_topic(request):
         #If there is a POST requestm then the data needs to be processed
         form = TopicForm(data = request.POST) #storing data that is stored in request.POST
         if form.is_valid(): #Checking whether or not all fields have been validly filled out
-            form.save() #Writes data in form to database
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
             return redirect("learning_logs:topics")
     
     #Displaying a blank or invalid form:
@@ -64,6 +72,8 @@ def new_entry(request, topic_id):
 def edit_entry(request, entry_id):
     entry = Entry.objects.get(id = entry_id)
     topic = entry.topic 
+    if topic.owner != request.user:
+        raise Http404
 
     if request.method != 'POST':
         form = EntryForm(instance = entry) #Django pulls up preexisting information for this entry
