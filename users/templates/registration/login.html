@@ -13,9 +13,11 @@
     
   <form method="post" action="{% url 'users:login' %}">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% bootstrap_form form%}
     
-    <button name="submit">Log in</button>
+    {%buttons%}
+      <button name="submit">Log in</button>
+    {%endbuttons%}
     <input type="hidden" name="next" 
       value="{% url 'learning_logs:index' %}" />
   </form>
