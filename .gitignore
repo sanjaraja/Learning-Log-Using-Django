@@ -4,3 +4,4 @@ db.sqlite3
 ll_env
 learning_logs\migrations
 *.pyc
+requirements.txt
