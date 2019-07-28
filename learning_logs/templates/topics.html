@@ -1,18 +1,25 @@
 <!Doctype html>
 {%extends "base.html"%}
 
+
 {%block content%}
-    <p> Topics </p>
+
+    {%block header%}
+      <h3> Topics: </h3>
+    {%endblock header%}
+
   
     <ul>
      {% for topic in topics%}
         <li> 
+          <h3>
             <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+          </h3>
         </li>
      {%empty%}
        <li> There are no topics. <li>
      {%endfor%}
     </ul>
 
-    <a href = "{% url 'learning_logs:new_topic'%}"> Add a new topic: </a>
+    <h3> <a href = "{% url 'learning_logs:new_topic'%}"> Add a new topic: </a> </h3>
 {%endblock content%}
